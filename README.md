@@ -1,170 +1,148 @@
 # LaunchLoop 🇮🇳
 
-> **Never launch blind. Validate demand before you build.**  
-> A structured startup de-risking platform built specifically for the Indian innovation ecosystem.
+> **Never launch blind. Validate demand before you build.**
+> A startup de-risking platform for Indian founders.
+
+🔗 **Live demo:** https://launch-loop-nine.vercel.app/
 
 ---
 
-## 1. Problem Statement & Vision
+## Status
 
-Too many early-stage founders launch without validated demand: they build technology before confirming customer need, partner with misaligned co-founders, or exhaust capital before proving willingness to pay. In India's diverse and price-sensitive market—spanning Tier-1 metros to Tier-2/Tier-3 towns—grounding every stage of venture creation in authentic operational constraints and real customer signals before incurring heavy engineering overhead is critical.
+- The **frontend is complete** and runs entirely on clearly labelled **sample demonstration data** through a service layer.
+- A Node/Express + Gemini API backend is **in progress** and is **not required** to run or deploy the app.
+- Pre-booking uses a **mock payment flow**. No real payments are processed.
 
-**LaunchLoop** provides a unified, 4-step pipeline that carries a founder from a verified real-world problem through complementary team formation, simulated customer stress-testing, and real refundable pre-orders.
+---
+
+## 1. Problem Statement
+
+Too many early-stage founders launch without validated demand. They build before confirming customer need, partner with misaligned co-founders, or run out of money before proving anyone will pay. India's market is diverse and price-sensitive, from Tier-1 metros to Tier-2/Tier-3 towns, so validating before building matters even more.
+
+**LaunchLoop** is a single 4-step pipeline that takes a founder from a real-world business problem, to a complementary team, to simulated customer stress-testing, to refundable pre-orders from real customers.
 
 ---
 
 ## 2. The 4-Step Connected Pipeline
 
 ```
-[ Step 1: Problem Board ] 
-       │ (Select verified problem & requirements)
+[ Step 1: Problem Board ]
+       │ (Select a business problem)
        ▼
-[ Step 2: Team Assembly ] 
-       │ (Auto-detect missing roles, match co-founders, run 1-week trial sprint)
+[ Step 2: Team Assembly ]
+       │ (Detect missing roles, match co-founders, run a trial sprint)
        ▼
-[ Step 3: Customer Simulator ] 
-       │ (Stress-test with simulated Indian personas across Metro & Tier-2/3)
+[ Step 3: Customer Simulator ]
+       │ (Stress-test with simulated Indian personas)
        ▼
-[ Step 4: Pre-booking Campaign ] 
-         (Lock in real demand with refundable deposits held by payment partner)
+[ Step 4: Pre-booking Campaign ]
+         (Collect refundable deposits; launch only when the threshold is met)
 ```
 
-1. **Find Real B2B Problems**: Browse pain points posted by verified Indian corporations (AgriTech, FinTech, Healthcare, Logistics, CleanTech) with committed pilot budgets (₹5L - ₹45L). Choosing a problem automatically initializes the venture context.
-2. **Assemble Complementary Co-founders**: The system analyzes the selected problem and identifies missing skillsets (e.g. Tech Lead, Operations, AI Engineer). Founders calculate compatibility scores across four working-style dimensions and execute a structured 1-week click-to-move trial sprint Kanban board before signing equity agreements.
-3. **Stress-Test with Simulated Indian Customers**: Generate synthetic customer panels across Indian demographics (Metro IT professionals, Tier-2 MSME retailers, Tier-3 smallholder farmers, homemakers, and skeptical procurement managers). Calculate deterministic confidence scores based on persona agreement and identify critical blind spots before spending capital.
-4. **Lock In Refundable Pre-order Demand**: Launch pre-booking campaigns with refundable deposits held safely by the payment partner. The founder's official launch button unlocks **only** when the backer threshold is achieved. If the campaign fails to hit its threshold by the deadline, deposits are automatically refunded.
+1. **Find real business problems.** Companies post problems (sample data: AgriTech, FinTech, Healthcare, Logistics, CleanTech) with pilot budgets. Selecting one starts the venture context.
+2. **Assemble complementary co-founders.** The app identifies missing skill sets for the chosen problem, matches founders with complementary profiles, scores compatibility across four working-style dimensions, and offers a 1-week click-to-move trial sprint board before any commitment.
+3. **Stress-test with simulated Indian customers.** Generate a panel of simulated personas across city tiers, income bands, languages and scepticism levels. A deterministic confidence score is computed from persona agreement.
+4. **Collect refundable pre-orders.** Founders set a threshold, deposit and deadline. The launch button unlocks only when the threshold is met. If it isn't met by the deadline, deposits are automatically refunded.
 
 ---
 
-## 3. Architecture & Folder Structure
+## 3. Roles
 
-Built with **React 18**, **TypeScript** (strict mode, zero `any`), **Tailwind CSS**, and **Vite 6**.
-
-```
-LaunchLoop/
-├── public/                     # Static assets & favicon
-├── src/
-│   ├── app/                    # Routing, top-level providers, App entry
-│   │   ├── App.tsx             # Root component with providers
-│   │   └── routes.tsx          # Route-level code-splitting (React.lazy + Suspense)
-│   ├── config/                 # Application configuration & permissions
-│   │   ├── navigation.ts       # Role-specific navigation menus
-│   │   ├── permissions.ts      # Role-based route guard definitions & friendly redirects
-│   │   └── personaDistributions.ts # Demographic distributions grounded in Census/NSSO/RBI data
-│   ├── context/                # Global state
-│   │   ├── AuthContext.tsx     # Role management (Founder, Enterprise, Backer) & mock token
-│   │   └── VentureContext.tsx  # Cross-pipeline venture state persisting Problem -> Team -> Sim -> Prebook
-│   ├── features/               # Domain feature modules
-│   │   ├── auth/               # LoginPage, RegisterPage, ProtectedRoute
-│   │   ├── backer/             # DiscoverCampaignsPage, MyPrebookingsPage
-│   │   ├── company/            # MyProblemsPage, CompanyProposalsPage
-│   │   ├── dashboard/          # Dashboard dispatcher, FounderDashboard, CompanyDashboard, BackerDashboard
-│   │   ├── landing/            # LandingPage with 4-step walkthrough & sample disclaimers
-│   │   ├── pipeline/           # PipelineStepper component tracking active stage
-│   │   ├── prebooking/         # PrebookingDashboardPage, PublicPrebookPage, MockCheckout
-│   │   ├── problems/           # ProblemBoardPage, ProblemDetailPage, CreateProblemPage, ProposalSubmitModal
-│   │   ├── simulator/          # SimulatorPage, SimulationReportPage, PersonaCards
-│   │   └── team/               # TeamFinderPage, EditProfilePage, TrialSprintPage, CompatibilityQuizModal
-│   ├── services/
-│   │   ├── api/                # Async typed interfaces (IProblemService, ITeamService, etc.)
-│   │   └── mocks/              # Realistic Indian sample seed data
-│   ├── shared/                 # Reusable atomic UI & layout
-│   │   ├── components/
-│   │   │   ├── feedback/       # Modal, Alerts
-│   │   │   ├── forms/          # FormInput, FormSelect, FormTextarea (accessible, aria-labelled)
-│   │   │   ├── layout/         # Navbar (with mobile menu drawer), Footer, Layout
-│   │   │   └── ui/             # Button, Badge, Card
-│   │   └── hooks/              # useDebounce, custom utilities
-│   ├── types/                  # Strict TypeScript domain models & Zod schemas
-│   └── utils/                  # Pure deterministic functions & unit tests
-│       ├── confidence.ts       # Pure mean/variance confidence scoring
-│       ├── matching.ts         # Complementary skill matching algorithm
-│       ├── compatibility.ts    # 4-dimension co-founder compatibility formula
-│       ├── prebookingLogic.ts  # Threshold & refund state machine
-│       └── currency.ts         # Indian Rupee Lakhs/Crores formatter
-└── package.json
-```
-
----
-
-## 4. Role Overview & Route Permissions
-
-LaunchLoop provides three distinct role workspaces with designated visual themes and route enforcement:
-
-| Role | Theme Accent | Permitted Features & Navigation |
+| Role | Theme | Features |
 | :--- | :--- | :--- |
-| **Founder** (`FOUNDER`) | Emerald (`brand`) | Pipeline Stepper, Problem Board, Team Finder, Trial Sprints, Customer Simulator, Pre-booking Manager |
-| **Company** (`ENTERPRISE`) | Indigo | Company Dashboard, Problem Portfolio, Incoming Proposal Review (Shortlist/Award/Reject), Post a Problem |
-| **Backer** (`BACKER`) | Amber | Backer Dashboard, Discover Products, My Pre-bookings Ledger, Refundable Deposit Checkout |
+| **Founder** (`FOUNDER`) | Emerald | Pipeline stepper, Problem Board, Team Finder, Trial Sprints, Customer Simulator, Pre-booking manager |
+| **Company** (`ENTERPRISE`) | Indigo | Company dashboard, posted problems, incoming proposal review (shortlist / accept / reject), post a problem |
+| **Backer / Early Adopter** (`BACKER`) | Amber | Discover campaigns, pre-book with a refundable deposit, My Pre-bookings |
 
-*Route Enforcement*: If a user attempts to access a URL not authorized for their active role (e.g., a Backer navigating to `/simulate` or a Founder navigating to `/company/proposals`), `ProtectedRoute` redirects them to their respective dashboard and displays a friendly notice banner explaining the redirection.
+If a user opens a URL their role isn't allowed to see (for example a Backer opening `/simulate`), `ProtectedRoute` redirects them to their own dashboard with a notice.
 
 ---
 
-## 5. Getting Started & Running Locally
+## 4. Architecture & Folder Structure
 
-### Prerequisites
-- Node.js (v18.x or v20+ recommended)
-- npm or yarn
+Built with **React 18**, **TypeScript** (strict mode), **Tailwind CSS**, **Zod**, **Vite** and **Vitest**.
 
-### Installation
-```bash
-git clone https://github.com/your-username/launchloop.git
-cd launchloop
-npm install
+```
+src/
+├── app/            # Routing (lazy-loaded routes), root providers
+├── config/         # Navigation, role permissions, persona distributions
+├── context/        # AuthContext (mock session), VentureContext (pipeline state)
+├── features/       # auth, backer, company, dashboard, landing, pipeline,
+│                   # prebooking, problems, simulator, team
+├── services/       # Typed service interfaces + mock implementations and sample data
+├── shared/         # Reusable UI components, layout, forms, hooks
+├── types/          # Domain models and Zod schemas
+└── utils/          # Pure functions with unit tests
+                    # (confidence, matching, compatibility, prebookingLogic, currency)
 ```
 
-### Development Server
+Design choices:
+- **Service layer:** components talk to interfaces, not data sources, so mock data can be swapped for a real backend without touching the UI.
+- **Pure, tested logic:** matching, compatibility, confidence and threshold/refund logic live in `utils` as pure functions.
+- **Validation:** all form and service inputs are validated with Zod.
+
+---
+
+## 5. Running Locally
+
+**Prerequisites:** Node.js 18+ and npm.
+
 ```bash
+git clone https://github.com/aanyasri/LaunchLoop.git
+cd LaunchLoop
+npm install
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Run Unit Tests
+Open http://localhost:5173 in your browser.
+
 ```bash
-npm run test
+npm run test        # unit tests (Vitest)
+npm run typecheck   # TypeScript check
+npm run lint        # ESLint
+npm run build       # production build in /dist
 ```
-Executes all 38 unit tests across schemas, permissions, confidence, compatibility, matching, and threshold logic using Vitest.
-
-### Type Check & Build
-```bash
-npm run typecheck
-npm run build
-```
-Generates an optimized, chunk-split production bundle in `/dist`.
 
 ---
 
-## 6. Mapping Mock Services to a Production Backend
+## 6. Deploying
 
-The frontend is architected using clean dependency inversion interfaces (`IProblemService`, `ITeamService`, `ISimulatorService`, `IPrebookingService`) that decouple UI components from data persistence:
+The app is a static site and needs no backend.
 
-| Mock Service | Future Production Architecture | Implementation Mapping |
-| :--- | :--- | :--- |
-| `IProblemService` | **Firebase Firestore / Supabase** | `problems` and `proposals` collections with Row Level Security (RLS) restricting proposal read access to owning company and submitting founder. |
-| `ITeamService` | **Supabase Vector / Pinecone** | Candidate skills and venture needs embedded as vectors with pgvector cosine similarity ranking complementary profiles. |
-| `ISimulatorService` | **Google Gemini API** | Gemini API prompt with structured JSON output schema matching `SimulatedPersona` and `SimulationResult`. Deterministic confidence computed via pure client/cloud utility. |
-| `IPrebookingService` | **Razorpay Route / Cashfree Payments** | Payment gateway split accounts holding refundable pre-booking deposits until the automated threshold webhook fires. |
+- Build command: `npm run build`
+- Output directory: `dist`
+- `vercel.json` rewrites all routes to `index.html` so React Router paths work on refresh.
 
 ---
 
-## 7. Honest Limitations & Founder Safeguards
+## 7. Mapping Mock Services to a Production Backend
 
-To prevent misleading founders or users, LaunchLoop enforces explicit product and communication safeguards:
-
-1. **Simulated Customers are Hypotheses, Not Demand Proof**:
-   - The Idea Simulator generates synthetic feedback to stress-test assumptions and prepare founders for real conversations. It **never** replaces talking to real human customers. Every simulation report displays a prominent disclaimer: *"This simulation provides hypothesis generation to prepare for real customers, not proof of demand. Use pre-booking to validate actual payment intent."*
-2. **Sample Demonstration Data**:
-   - All seeded enterprise problems, co-founder profiles, and pre-booking campaigns are realistic sample demonstration data designed for the Indian startup landscape. Footer and preview badges clearly label sample data.
-3. **Refundable Deposits Held by Payment Partner**:
-   - LaunchLoop never claims to be a licensed banking escrow. Backer funds are described accurately as: *"Refundable deposit held safely by the payment partner, automatically refunded if the threshold is not met by the deadline."*
-4. **Zero Financial or Card Data Storage**:
-   - The mock checkout is a pure sandbox demonstration. No real credit card, UPI MPIN, or bank credentials are ever requested or stored.
-5. **No Invented Founder Testimonials**:
-   - The landing page focuses exclusively on the objective 4-stage validation workflow and clear feature demonstrations.
+| Mock service | Planned production approach |
+| :--- | :--- |
+| `IProblemService` | Database (e.g. Firebase Firestore or Supabase) with access rules so proposals are readable only by the owning company and the submitting founder |
+| `ITeamService` | Embedding-based similarity search over skills and venture needs |
+| `ISimulatorService` | Gemini API with structured JSON output validated by the existing Zod schemas; the API key stays on the server |
+| `IPrebookingService` | Payment gateway (e.g. Razorpay or Cashfree) holding refundable deposits until the threshold is met |
 
 ---
 
-## License
+## 8. Limitations & Safeguards
 
-MIT © LaunchLoop India. Built for builders.
+1. **Simulated customers are hypotheses, not proof of demand.** The simulator generates synthetic feedback to prepare founders for real conversations. It does not replace talking to real customers. Every report carries this disclaimer.
+2. **Persona distributions are placeholders.** `config/personaDistributions.ts` is designed to be grounded in sources such as Census of India, NSSO and RBI data. The current values are illustrative.
+3. **All companies, problems, profiles, budgets and campaigns are sample data** and are labelled as such in the app.
+4. **Refundable deposits are held by the payment partner.** LaunchLoop does not claim to be a licensed escrow.
+5. **No real payments or financial data.** The checkout is a sandbox demonstration. No card, UPI or bank details are requested or stored.
+6. **Demo authentication only.** Login is a mock role switcher, not production auth.
+7. **A deposit is a weaker demand signal than a full purchase.** The pre-booking dashboard shows this difference.
+
+---
+
+## 9. Future Work
+
+- Real backend with Gemini-powered persona simulation, production authentication and a database.
+- Real payment partner integration for refundable deposits.
+- Founder verification and public track record (past campaigns delivered or refunded).
+- Optional, embeddable pre-booking pages so founders can use their own website.
+- B2B pilot pre-booking slots for companies from the Problem Board.
+- Calibrating simulated personas against real survey data.
